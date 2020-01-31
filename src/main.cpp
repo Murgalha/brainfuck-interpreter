@@ -13,19 +13,6 @@ enum {
 	NARGS
 };
 
-int signal_of(int n) {
-	if(n < 0)
-		return -1;
-	return 1;
-}
-
-void print_n(std::vector<cell_t> tape, int n) {
-	for(int i = 0; i < n; i++) {
-		std::cout << tape[i] << " ";
-	}
-	std::cout << std::endl;
-}
-
 void goto_matching_bracket(std::string::iterator &it) {
 	char ref, target;
 	int balance_counter = 0, inc;
