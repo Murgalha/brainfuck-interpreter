@@ -2,6 +2,7 @@
 #include <fstream>
 #include <sstream>
 #include <vector>
+#include <algorithm>
 
 #define NCELLS 30000
 #define cell_t unsigned int
@@ -109,6 +110,42 @@ std::string read_file(std::string filename) {
 	return buff.str();
 }
 
+void check_syntax(std::string file, bool strict) {
+	int n = std::count(file.begin(), file.end(), '[');
+
+	if(n != std::count(file.begin(), file.end(), ']')) {
+		std::cout << "ERROR: Unbalanced number of brackets"
+				  << std::endl;
+		exit(EXIT_FAILURE);
+	}
+
+	if(strict) {
+		unsigned int n_line = 1, n_col;
+		std::string line;
+		std::stringstream ss(file);
+		std::string valid(" \n\r\t<>.,+-[]");
+		bool error = false;
+
+		while(!ss.eof()) {
+			getline(ss, line);
+			n_col = 0;
+			// iterate through each character
+			for(auto c : line) {
+				if(valid.find(c) == std::string::npos) {
+					error = true;
+					std::cout << "ERROR: Invalid character '"
+							  << c << "' in line " << n_line
+							  << ", column " << n_col << std::endl;
+				}
+				n_col++;
+			}
+			n_line++;
+		}
+		if(error)
+			exit(EXIT_FAILURE);
+	}
+}
+
 int main(int argc, char *argv[]) {
 	// error checking on number of arguments
 	if(argc != NARGS) {
@@ -118,6 +155,8 @@ int main(int argc, char *argv[]) {
 	}
 
 	std::string file = read_file(argv[FILENAME]);
+
+	check_syntax(file, true);
 
 	parse_file(file);
 }
