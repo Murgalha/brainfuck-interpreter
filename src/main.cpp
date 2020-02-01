@@ -97,7 +97,7 @@ std::string read_file(std::string filename) {
 
 	// check for error on opening file
 	if(file.fail()) {
-		std::cout << "ERROR: Could not open " << filename << std::endl;
+		std::cerr << "ERROR: Could not open " << filename << std::endl;
 		exit(EXIT_FAILURE);
 	}
 
@@ -114,7 +114,7 @@ void check_syntax(std::string file, bool strict) {
 	int n = std::count(file.begin(), file.end(), '[');
 
 	if(n != std::count(file.begin(), file.end(), ']')) {
-		std::cout << "ERROR: Unbalanced number of brackets"
+		std::cerr << "ERROR: Unbalanced number of brackets"
 				  << std::endl;
 		exit(EXIT_FAILURE);
 	}
@@ -133,7 +133,7 @@ void check_syntax(std::string file, bool strict) {
 			for(auto c : line) {
 				if(valid.find(c) == std::string::npos) {
 					error = true;
-					std::cout << "ERROR: Invalid character '"
+					std::cerr << "ERROR: Invalid character '"
 							  << c << "' in line " << n_line
 							  << ", column " << n_col << std::endl;
 				}
@@ -149,7 +149,7 @@ void check_syntax(std::string file, bool strict) {
 int main(int argc, char *argv[]) {
 	// error checking on number of arguments
 	if(argc != NARGS) {
-		std::cout << "Usage: " << argv[PROGNAME]
+		std::cerr << "Usage: " << argv[PROGNAME]
 				  << " <FILENAME> "<< std::endl;
 		exit(EXIT_FAILURE);
 	}
